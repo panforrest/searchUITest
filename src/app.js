@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import { Home } from './components'
 
 class App extends Component {
   render(){
 	return(
 	  <div>
-	    This is React.
+	    THIS IS REACT
+	    <Home />
 	  </div>
 	)
   }
