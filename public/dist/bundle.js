@@ -22392,6 +22392,7 @@ var ProductRow = function (_React$Component2) {
         { style: { color: 'red' } },
         this.props.product.name
       );
+
       return _react2.default.createElement(
         'tr',
         null,
@@ -22424,15 +22425,22 @@ var ProductTable = function (_React$Component3) {
   _createClass(ProductTable, [{
     key: 'render',
     value: function render() {
+      var _this4 = this;
+
       var rows = [];
       var lastCategory = null;
+
       this.props.products.forEach(function (product) {
+        if (!product.name.match(new RegExp(_this4.props.filterText, 'i')) || !product.stocked && _this4.props.inStockOnly) {
+          return;
+        }
         if (product.category !== lastCategory) {
           rows.push(_react2.default.createElement(ProductCategoryRow, { category: product.category, key: product.category }));
         }
         rows.push(_react2.default.createElement(ProductRow, { product: product, key: product.name }));
         lastCategory = product.category;
       });
+
       return _react2.default.createElement(
         'table',
         null,
@@ -22476,16 +22484,26 @@ var SearchBar = function (_React$Component4) {
   }
 
   _createClass(SearchBar, [{
+    key: 'handleFilterTextInputChange',
+    value: function handleFilterTextInputChange(e) {
+      this.props.onFilterTextInput(e.target.value);
+    }
+  }, {
+    key: 'handleInStockInputChange',
+    value: function handleInStockInputChange(e) {
+      this.props.onInStockInput(e.target.checked);
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
         'form',
         null,
-        _react2.default.createElement('input', { type: 'text', placeholder: 'Search...' }),
+        _react2.default.createElement('input', { type: 'text', placeholder: 'Search...', value: this.props.filterText, onChange: this.handleFilterTextInputChange.bind(this) }),
         _react2.default.createElement(
           'p',
           null,
-          _react2.default.createElement('input', { type: 'checkbox' }),
+          _react2.default.createElement('input', { type: 'checkBox', checked: this.props.inStockOnly, onChange: this.handleInStockInputChange.bind(this) }),
           ' ',
           'Only show products in stock'
         )
@@ -22499,20 +22517,41 @@ var SearchBar = function (_React$Component4) {
 var FilterableProductTable = function (_React$Component5) {
   _inherits(FilterableProductTable, _React$Component5);
 
-  function FilterableProductTable() {
+  function FilterableProductTable(props) {
     _classCallCheck(this, FilterableProductTable);
 
-    return _possibleConstructorReturn(this, (FilterableProductTable.__proto__ || Object.getPrototypeOf(FilterableProductTable)).apply(this, arguments));
+    var _this6 = _possibleConstructorReturn(this, (FilterableProductTable.__proto__ || Object.getPrototypeOf(FilterableProductTable)).call(this, props));
+
+    _this6.state = {
+      filterText: '',
+      inStockOnly: false
+    };
+
+    return _this6;
   }
 
   _createClass(FilterableProductTable, [{
+    key: 'handleFilterTextInput',
+    value: function handleFilterTextInput(filterText) {
+      this.setState({
+        filterText: filterText
+      });
+    }
+  }, {
+    key: 'handleInStockInput',
+    value: function handleInStockInput(inStockOnly) {
+      this.setState({
+        inStockOnly: inStockOnly
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(SearchBar, null),
-        _react2.default.createElement(ProductTable, { products: this.props.products })
+        _react2.default.createElement(SearchBar, { filterText: this.state.filterText, inStockOnly: this.state.inStockOnly, onFilterTextInput: this.handleFilterTextInput.bind(this), onInStockInput: this.handleInStockInput.bind(this) }),
+        _react2.default.createElement(ProductTable, { products: this.props.products, filterText: this.state.filterText, inStockOnly: this.state.inStockOnly })
       );
     }
   }]);
