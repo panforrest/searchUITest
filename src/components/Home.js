@@ -31,7 +31,7 @@ class ProductTable extends React.Component{
     var lastCategory = null;
 
     this.props.products.forEach((product) => {
-      if (!product.name.match(new RegExp(this.props.filterText, 'i')) || (!product.stocked && this.props.inStockOnly)) {
+      if (!product.name.match(new RegExp(this.props.filterText, 'i')) || (!product.stocked)) {
         return;
       }
       if (product.category !== lastCategory) {
@@ -61,9 +61,9 @@ class SearchBar extends React.Component {
     this.props.onFilterTextInput(e.target.value);
   }
 
-  handleInStockInputChange(e){
-    this.props.onInStockInput(e.target.checked);
-  }
+  // handleInStockInputChange(e){
+  //   this.props.onInStockInput(e.target.checked);
+  // }
 
   render(){
     return(
@@ -75,7 +75,7 @@ class SearchBar extends React.Component {
         value={this.props.filterText} onChange={this.handleFilterTextInputChange.bind(this)}/>
 
         <p>
-          <input type="checkBox" checked={this.props.inStockOnly} onChange={this.handleInStockInputChange.bind(this)}/>
+
           {' '}
           Only show products in stock
         </p>
@@ -89,7 +89,7 @@ class FilterableProductTable extends React.Component{
     super(props)
     this.state = {
       filterText: '',
-      inStockOnly: false
+      // inStockOnly: false
     };
 
   }
@@ -100,17 +100,17 @@ class FilterableProductTable extends React.Component{
     })
   }
 
-  handleInStockInput(inStockOnly){
-    this.setState({
-      inStockOnly: inStockOnly
-    })
-  }
+  // handleInStockInput(inStockOnly){
+  //   this.setState({
+  //     inStockOnly: inStockOnly
+  //   })
+  // }
 
   render(){
     return(
       <div>
-        <SearchBar filterText={this.state.filterText} inStockOnly={this.state.inStockOnly} onFilterTextInput={this.handleFilterTextInput.bind(this)} onInStockInput={this.handleInStockInput.bind(this)} />
-        <ProductTable products={this.props.products} filterText={this.state.filterText} inStockOnly={this.state.inStockOnly} />
+        <SearchBar filterText={this.state.filterText} onFilterTextInput={this.handleFilterTextInput.bind(this)} />
+        <ProductTable products={this.props.products} filterText={this.state.filterText} />
       </div>
     )
   }
