@@ -22499,7 +22499,11 @@ var SearchBar = function (_React$Component4) {
       return _react2.default.createElement(
         'form',
         null,
-        _react2.default.createElement('input', { type: 'text', placeholder: 'Search...', value: this.props.filterText, onChange: this.handleFilterTextInputChange.bind(this) }),
+        _react2.default.createElement('input', { type: 'text',
+          className: 'textInput',
+          ref: 'filterTextInput',
+          placeholder: 'Search...',
+          value: this.props.filterText, onChange: this.handleFilterTextInputChange.bind(this) }),
         _react2.default.createElement(
           'p',
           null,
